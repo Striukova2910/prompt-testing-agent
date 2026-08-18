@@ -1,89 +1,162 @@
-# prompt-testing-agent
-# 🤖 Multi-Agent Prompt Testing App
+# Prompt Testing Agent
 
-This app lets you **test and evaluate prompts** for AI chatbots using **three interacting agents**:
+Prompt Testing Agent is a tool for testing and evaluating prompts and AI agent behavior.
 
-1. **User Agent** — acts like a user asking questions and follow-ups.
-2. **Business Agent** — answers based on a given system prompt (for example, a tech support bot).
-3. **Analyzer Agent** — reviews the whole dialogue and scores the Business Agent using a checklist.
+The user can define any prompt with custom instructions, roles, rules, and constraints. The system is not limited to a specific domain or use case.
 
-The goal is to check if your prompts make the AI behave correctly and stay within the topic.
+The main goal of the project is to help identify prompt weaknesses, unexpected model behavior, and instruction-following problems before using a prompt in a real application.
 
 ---
 
-## 🚀 Features
+## Application
 
-* Interactive interface built with **Streamlit**
-* Upload or edit your own prompts, test cases, and evaluation checklist
-* Choose different **OpenAI models** (`gpt-4o`, `gpt-3.5-turbo`)
-* Adjustable **temperature** for creativity control
-* Automatic dialogue generation and analysis
-* Random “trap” questions to test robustness
+The application provides a simple Streamlit interface for creating and running prompt experiments.
 
----
+The user can choose between manual testing and automated AI-to-AI testing.
 
-## 🧩 Project Structure
-
-```
-mainVisual.py       → Launches the Streamlit app
-choice1.py          → (Same logic variant) defines the showWindow() function
-business_agent.py   → Defines the business agent (uses LangChain + ChatOpenAI)
-user_agent.py       → Generates user questions and follow-ups
-analyzer_agent.py   → Evaluates the dialogue using a checklist
-```
+![Main Page](img/main_page.png)
 
 ---
 
-## 🛠️ Requirements
+## Testing Modes
 
-* Python 3.10+
-* Streamlit
-* LangChain
-* OpenAI
-* python-dotenv
+### 1. Manual Testing
 
-Install dependencies:
+In manual testing mode, the user interacts directly with the AI agent.
+
+This makes it possible to quickly check how the model understands the prompt, follows instructions, handles restrictions, and responds to different types of input.
+
+### 2. AI-to-AI Testing
+
+In AI-to-AI testing mode, one AI acts as the tested agent while another AI acts as a test user.
+
+The tester agent interacts with the tested agent and can generate different questions or scenarios to reveal weaknesses, unexpected behavior, or failures to follow the original instructions.
+
+The user can configure:
+
+- any prompt for the tested agent;
+- a custom prompt for the tester agent;
+- different AI models for different agents;
+- temperature settings;
+- custom test cases;
+- evaluation criteria and checklists;
+- optional text files with additional context.
+
+Models can be selected independently for the agents, which makes it possible to experiment with different model configurations.
+
+---
+
+## Example: Testing a Domain Restriction
+
+To demonstrate the system, the tested agent was given a prompt that restricted it to answering only questions related to Machine Learning.
+
+This is only one example. The application can test prompts from any domain and with different types of instructions and constraints.
+
+The tester agent asked both relevant and irrelevant questions.
+
+For example, the tested agent correctly answered a technical question about neural-network activation functions.
+
+However, when the tester asked:
+
+**"How to meditate correctly?"**
+
+the agent also answered the question, even though it was outside the allowed Machine Learning domain.
+
+![Main Page](img/ai_test.png)
+
+This revealed an instruction-following failure that might not be visible when testing the prompt only with expected user questions.
+
+---
+
+## Automated Dialogue Analysis
+
+After the test conversation, another AI agent can analyze the dialogue using the provided evaluation checklist.
+
+The analyzer reviews the responses, checks whether the tested agent followed the defined requirements, identifies problems, and produces an overall assessment.
+
+In the example above, the analyzer correctly detected that the response about meditation violated the domain restriction.
+
+It also produced a rating and explained the detected issues.
+
+![Main Page](img/dialogue_analyzer.png)
+
+This creates a simple evaluation pipeline:
+
+**Prompt → Tested Agent → Tester Agent → Conversation → Dialogue Analyzer → Evaluation**
+
+---
+
+## Custom Evaluation
+
+The evaluation is not limited to domain restrictions.
+
+The user can define a custom checklist depending on what should be tested.
+
+For example, evaluation criteria can include:
+
+- following specific instructions;
+- staying within a defined domain;
+- avoiding prohibited topics;
+- maintaining a required response style;
+- providing clear and polite responses;
+- avoiding unsupported answers;
+- following formatting requirements;
+- handling unexpected or adversarial questions.
+
+This makes the tool suitable for experimenting with many different prompt behaviors.
+
+---
+
+## Model Configuration
+
+Different models can be selected for different agents.
+
+For example, the system can use separate models for:
+
+- the tested agent;
+- the simulated user / tester;
+- the dialogue analyzer.
+
+Temperature can also be configured to experiment with different levels of response variability.
+
+This makes it possible to compare how prompts behave under different model configurations.
+
+---
+
+## Features
+
+- Test arbitrary prompts and system instructions
+- Define custom roles, rules, and behavioral constraints
+- Manual prompt testing
+- AI-to-AI automated testing
+- Custom tester prompts
+- Independent model selection for different agents
+- Configurable temperature
+- Custom test cases
+- Custom evaluation checklists
+- Optional context from uploaded text files
+- Automated dialogue analysis
+- Detection of instruction-following failures
+- Streamlit interface
+
+---
+
+## Tech Stack
+
+- Python
+- Streamlit
+- OpenAI API
+- LLM-based agents
+- Prompt engineering
+- Automated LLM evaluation
+
+---
+
+## Running Locally
+
+Run the Streamlit application:
 
 ```bash
-pip install streamlit langchain-openai python-dotenv
-```
+streamlit run PromptAgentStreamlit/mainVisual.py
 
----
-
-## ⚙️ How to Run
-
-1. Add your OpenAI API key in a `.env` file:
-
-   ```
-   OPENAI_API_KEY=your_api_key_here
-   ```
-2. Run the app:
-
-   ```bash
-   streamlit run mainVisual.py
-   ```
-3. The Streamlit window will open in your browser.
-
----
-
-## 💡 How It Works
-
-1. The **User Agent** generates a main question and several follow-ups.
-2. The **Business Agent** replies to each one according to its system prompt.
-3. The **Analyzer Agent** reads the full dialogue and rates the Business Agent based on your checklist.
-
-You can change prompts, test cases, or trap questions in the sidebar to test different behaviors.
-
----
-
-## 📈 Example Use
-
-* Test support bot responses within a specific domain (e.g., Machine Learning).
-* Check if the bot avoids forbidden or political topics.
-* Compare results between GPT models and temperatures.
-
----
-
-## 🧠 Credits
-
-Created for **prompt engineering and AI behavior testing** using Streamlit and LangChain.
+![Main Page](img/run_app.png)
