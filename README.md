@@ -159,4 +159,5 @@ Run the Streamlit application:
 ```bash
 streamlit run PromptAgentStreamlit/mainVisual.py
 
-![Main Page](img/run_app.png)
+![Main Page](run_app.png)
+
